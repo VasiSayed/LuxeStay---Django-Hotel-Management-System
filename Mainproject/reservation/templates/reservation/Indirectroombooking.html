@@ -1,0 +1,393 @@
+{% block style %}
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+
+    :root {
+        --primary: #2c3e50;
+        --secondary: #34495e;
+        --accent: #3498db;
+        --accent-dark: #2980b9;
+        --success: #27ae60;
+        --warning: #e67e22;
+        --danger: #e74c3c;
+        --light: #ecf0f1;
+        --dark: #2c3e50;
+        --shadow: rgba(44, 62, 80, 0.15);
+    }
+
+    body {
+        font-family: 'Inter', sans-serif;
+        background: linear-gradient(135deg, #f5f7fa 0%, #e8eef2 100%);
+        margin: 0;
+        padding: 0;
+        color: var(--dark);
+        min-height: 100vh;
+    }
+
+    .page-header {
+        background: linear-gradient(rgba(44, 62, 80, 0.9), rgba(44, 62, 80, 0.8)),
+                    url('/static/images/hotel-bg.jpg');
+        background-size: cover;
+        padding: 60px 20px;
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    h1 {
+        font-family: 'Playfair Display', serif;
+        color: white;
+        font-size: 3.5rem;
+        margin: 0;
+        font-weight: 600;
+        letter-spacing: 1px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .container {
+        max-width: 1600px;
+        margin: 0 auto;
+        padding: 0 40px;
+        display: grid;
+        grid-template-columns: 1fr 400px;
+        gap: 40px;
+    }
+
+    .rooms-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+        gap: 30px;
+    }
+
+    .main {
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 10px 20px var(--shadow);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+    }
+
+    .main::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border: 2px solid var(--accent);
+        border-radius: 15px;
+        opacity: 0;
+        transition: all 0.4s ease;
+    }
+
+    .main:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 30px var(--shadow);
+    }
+
+    .main:hover::before {
+        opacity: 1;
+        inset: -4px;
+    }
+
+    .imgdiv {
+        height: 280px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.8s ease;
+    }
+
+    .main:hover .img {
+        transform: scale(1.1);
+    }
+
+    .info {
+        padding: 25px;
+    }
+
+    .name {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.8rem;
+        color: var(--primary);
+        margin: 0 0 15px 0;
+        font-weight: 600;
+    }
+
+    .loc, .coun {
+        display: flex;
+        align-items: center;
+        margin: 12px 0;
+        color: var(--secondary);
+        font-size: 1.05rem;
+    }
+
+    .loc::before, .coun::before {
+        content: '•';
+        color: var(--accent);
+        margin-right: 10px;
+        font-size: 1.2em;
+    }
+
+    .price {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.6rem;
+        color: var(--accent);
+        margin: 20px 0;
+        font-weight: 600;
+        position: relative;
+        padding-top: 15px;
+    }
+
+    .price::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 50px;
+        height: 2px;
+        background: var(--accent);
+    }
+
+    .form-container {
+        background: white;
+        padding: 40px;
+        border-radius: 15px;
+        box-shadow: 0 10px 20px var(--shadow);
+        position: sticky;
+        top: 40px;
+        height: fit-content;
+    }
+
+    .form-container h2 {
+        font-family: 'Playfair Display', serif;
+        color: var(--primary);
+        font-size: 2.2rem;
+        margin: 0 0 30px 0;
+        text-align: center;
+        position: relative;
+        padding-bottom: 15px;
+    }
+
+    .form-container h2::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 2px;
+        background: var(--accent);
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+    }
+
+    form p {
+        margin: 0;
+    }
+
+    form label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--secondary);
+        font-weight: 500;
+    }
+
+    form input,
+    form select,
+    form textarea {
+        width: 100%;
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 1rem;
+        color: var(--dark);
+        background: var(--light);
+        transition: all 0.3s ease;
+    }
+
+    form input:focus,
+    form select:focus,
+    form textarea:focus {
+        outline: none;
+        border-color: var(--accent);
+        background: white;
+        box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.1);
+    }
+
+    form input[type="submit"] {
+        background: var(--accent);
+        color: white;
+        font-weight: 600;
+        font-size: 1.1rem;
+        padding: 15px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    form input[type="submit"]:hover {
+        background: var(--accent-dark);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+    }
+
+    .errorlist {
+        list-style: none;
+        padding: 0;
+        margin: 5px 0;
+        color: var(--danger);
+        font-size: 0.9rem;
+    }
+
+    .message {
+        background: var(--danger);
+        color: white;
+        padding: 15px;
+        border-radius: 8px;
+        text-align: center;
+        margin-top: 20px;
+        font-weight: 500;
+        animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+        from {
+            transform: translateY(-10px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .empty {
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: 60px;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 10px 20px var(--shadow);
+    }
+
+    .empty p {
+        font-size: 1.4rem;
+        color: var(--secondary);
+        margin: 0;
+        font-style: italic;
+    }
+
+    @media (max-width: 1200px) {
+        .container {
+            grid-template-columns: 1fr;
+        }
+
+        .form-container {
+            position: static;
+            margin-bottom: 40px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .container {
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+        }
+
+        .rooms-container {
+            grid-template-columns: 1fr;
+        }
+
+        .form-container {
+            padding: 30px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<header class="page-header">
+    <h1>Luxury Hotel Accommodations</h1>
+</header>
+
+<div class="container">
+    <div class="rooms-container">
+        {% for ro in rooms %}
+            <article class="main">
+                {% if ro.picture %}
+                <div class="imgdiv">
+                    <img class="img" src="{{ ro.picture.url }}" alt="{{ ro.room_type }}">
+                </div>
+                {% endif %}
+                <div class="info">
+                    <h2 class="name">{{ ro.room_type }}</h2>
+                    <p class="loc">Room No: {{ ro.room_no }}</p>
+                    <p class="coun">{{ ro.key_features }}</p>
+                    <p class="coun">Air Conditioning: {{ ro.AC|yesno:"Available,Not Available" }}</p>
+                    <p class="price">₹{{ ro.price_per_night }} per night</p>
+                </div>
+            </article>
+        {% empty %}
+            <div class="empty">
+                <p>No Rooms Available at the Moment</p>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="form-container">
+        <h2>Reserve Your Stay</h2>
+        <form action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% for field in form %}
+                <p>
+                    {% if field.errors %}
+                        <ul class="errorlist">
+                            {% for error in field.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                    {% if field.name == 'Check_in_date' %}
+                        {{ field.label_tag }}
+                        <input 
+                            type="date" 
+                            name="{{ field.name }}" 
+                            class="form-control" 
+                            placeholder="Select a date" 
+                            min="{{ formatted_date }}" 
+                            max="{{ max_date }}" 
+                        />
+                    {% endif %}
+                    {% if field.name == "Check_out_date" %}
+                        {{ field.label_tag }}
+                        <input 
+                            type="date" 
+                            name="{{ field.name }}" 
+                            class="form-control" 
+                            placeholder="Select a date" 
+                            min="{{ formatted_date }}" 
+                            max="{{ max_date }}" 
+                        />
+                    {% else %}
+                        {{ field.label_tag }} {{ field }}
+                    {% endif %}
+                </p>
+            {% endfor %}
+            <input type="submit" value="Complete Reservation" />
+            {% if Mess %}
+                <div class="message">{{ Mess }}</div>
+            {% endif %}
+        </form>
+    </div>
+</div>
+{% endblock %}

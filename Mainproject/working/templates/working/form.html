@@ -1,0 +1,187 @@
+{% extends 'hotel.html' %}
+
+{% block title %}
+{{ title }} Page
+{% endblock %}
+
+{% block style %}
+<style>
+    .form-container {
+        max-width: 800px;
+        margin: 3rem auto;
+        padding: 0 1rem;
+    }
+
+    .form-card {
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        border: none;
+    }
+
+    .form-header {
+        background: var(--dark-bg);
+        padding: 2rem 1rem;
+        text-align: center;
+        border-bottom: 3px solid #e74c3c;
+    }
+
+    .form-header h2 {
+        color: #fff;
+        font-family: 'Playfair Display', serif;
+        font-size: 2.2rem;
+        margin: 0;
+        font-weight: 700;
+    }
+
+    .form-body {
+        padding: 2.5rem 2rem;
+        background: linear-gradient(to bottom, #fff, #f8f9fa);
+    }
+
+    .form-group {
+        margin-bottom: 1.8rem;
+    }
+
+    .form-label {
+        font-family: 'Raleway', sans-serif;
+        font-weight: 600;
+        color: var(--text-dark);
+        margin-bottom: 0.5rem;
+        font-size: 1rem;
+    }
+
+    .form-control {
+        border: 1px solid #dee2e6;
+        border-radius: 6px;
+        padding: 0.8rem 1rem;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background-color: #fff;
+    }
+
+    .form-control:focus {
+        border-color: #2c3e50;
+        box-shadow: 0 0 0 0.2rem rgba(44, 62, 80, 0.1);
+    }
+
+    select.form-control {
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%232c3e50' viewBox='0 0 16 16'%3E%3Cpath d='M8 11l-7-7h14l-7 7z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 1rem center;
+        padding-right: 2.5rem;
+    }
+
+    .error-message {
+        background: #fff5f5;
+        border-left: 4px solid #e74c3c;
+        color: #c0392b;
+        padding: 0.8rem 1rem;
+        margin-bottom: 1rem;
+        border-radius: 4px;
+        font-size: 0.9rem;
+    }
+
+    .submit-btn {
+        background: #2c3e50;
+        color: #fff;
+        padding: 0.8rem 2.5rem;
+        font-size: 1.1rem;
+        border-radius: 30px;
+        border: none;
+        transition: all 0.3s ease;
+        font-family: 'Raleway', sans-serif;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+    }
+
+    .submit-btn:hover {
+        background: #34495e;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(44, 62, 80, 0.2);
+    }
+
+    .submit-btn:active {
+        transform: translateY(0);
+    }
+
+    /* File input styling */
+    input[type="file"] {
+        background: #f8f9fa;
+        border: 2px dashed #dee2e6;
+        padding: 1rem;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    input[type="file"]:hover {
+        border-color: #2c3e50;
+        background: #fff;
+    }
+
+    /* Checkbox and Radio styling */
+    input[type="checkbox"], input[type="radio"] {
+        width: 1.2rem;
+        height: 1.2rem;
+        margin-right: 0.5rem;
+    }
+
+    /* Textarea styling */
+    textarea.form-control {
+        min-height: 120px;
+        resize: vertical;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <div class="form-card">
+        <div class="form-header">
+            <h2>{{ title }}</h2>
+        </div>
+        <div class="form-body">
+            <form action="" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="form-group">
+                        {% if field.errors %}
+                            {% for error in field.errors %}
+                                <div class="error-message">
+                                    {{ error }}
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                        <label for="{{ field.id_for_label }}" class="form-label">
+                            {{ field.label }}
+                            {% if field.field.required %}
+                                <span class="text-danger">*</span>
+                            {% endif %}
+                        </label>
+                        {% with field.field.widget.input_type as input_type %}
+                            {% if input_type == 'file' %}
+                                <div class="file-upload-wrapper">
+                                    {{ field }}
+                                </div>
+                            {% else %}
+                                {{ field }}
+                            {% endif %}
+                        {% endwith %}
+                        {% if field.help_text %}
+                            <small class="form-text text-muted">{{ field.help_text }}</small>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+                <div class="text-center mt-4">
+                    <button type="submit" class="submit-btn">
+                        Create {{ title }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

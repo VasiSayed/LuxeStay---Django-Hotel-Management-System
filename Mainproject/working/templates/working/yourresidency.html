@@ -1,0 +1,215 @@
+{% extends 'hotel.html' %}
+
+{% block title %}
+Residency Page
+{% endblock %}
+
+{% block style %}
+<style>
+    :root {
+        --primary-color: #2563eb;
+        --primary-dark: #1e40af;
+        --card-background: #ffffff;
+        --text-primary: #1f2937;
+        --text-secondary: #4b5563;
+    }
+
+    body {
+        font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+        background: linear-gradient(to bottom, #f9f9f9, #eaeaea);
+        margin: 0;
+        padding: 0;
+    }
+
+    .page-title {
+        text-align: center;
+        color: var(--text-primary);
+        margin: 40px 0;
+        font-size: 2.5rem;
+        font-weight: 700;
+    }
+
+    .container {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        gap: 30px;
+        padding: 20px 40px;
+        margin: 0 auto;
+        scrollbar-width: thin;
+        scrollbar-color: #888 #f1f1f1;
+    }
+
+    .container::-webkit-scrollbar {
+        height: 8px;
+    }
+
+    .container::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 4px;
+    }
+
+    .container::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 4px;
+    }
+
+    .container::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+
+    .main {
+        min-width: 340px;
+        width: 340px;
+        height: 450px;
+        background: var(--card-background);
+        border-radius: 15px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        transition: transform 0.3s ease;
+        flex-shrink: 0;
+    }
+
+    .main:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .imgdiv {
+        width: 100%;
+        height: 60%;
+        overflow: hidden;
+    }
+
+    .img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+
+    .main:hover .img {
+        transform: scale(1.05);
+    }
+
+    .info {
+        padding: 20px;
+        height: 40%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .name {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin: 0 0 10px 0;
+    }
+
+    .loc {
+        font-size: 1.1rem;
+        color: var(--text-secondary);
+        margin: 5px 0;
+    }
+
+    .coun {
+        font-size: 1rem;
+        color: var(--text-secondary);
+        font-style: italic;
+        margin: 5px 0;
+    }
+
+    .button-group {
+        display: flex;
+        gap: 10px;
+        margin-top: auto;
+    }
+
+    .btn {
+        flex: 1;
+        padding: 10px;
+        font-size: 1rem;
+        text-align: center;
+        text-decoration: none;
+        border-radius: 6px;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn:first-child {
+        background: var(--primary-color);
+        color: white;
+    }
+
+    .btn:first-child:hover {
+        background: var(--primary-dark);
+    }
+
+    .btn:last-child {
+        background: #ef4444;
+        color: white;
+    }
+
+    .btn:last-child:hover {
+        background: #dc2626;
+    }
+
+    .empty {
+        width: 100%;
+        text-align: center;
+        padding: 40px;
+        font-size: 1.5rem;
+        color: #666;
+    }
+
+    @media (max-width: 768px) {
+        .container {
+            padding: 20px;
+            gap: 20px;
+        }
+
+        .main {
+            min-width: 300px;
+            width: 300px;
+            height: 400px;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            margin: 30px 0;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<h1 class="page-title">All Residencies Created By You</h1>
+
+<div class="container">
+    {% for res in resi %}
+    <div class="main">
+        {% if res.logo %}
+        <div class="imgdiv">
+            <img class="img" src="{{ res.logo.url }}" alt="{{ res.name }} Logo">
+        </div>
+        {% endif %}
+        <div class="info">
+            <div>
+                <p class="name">{{ res.name }}</p>
+                <p class="loc">{{ res.city }}</p>
+                <p class="coun">{{ res.state }}, {{ res.country }}</p>
+            </div>
+            <div class="button-group">
+                <a class="btn" href="/working/rooms/{{res.id}}">View Rooms</a>
+                <a class="btn" href="/working/Delete-residency/{{res.id}}">Delete</a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="empty">
+        <p>No Residencies Found</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

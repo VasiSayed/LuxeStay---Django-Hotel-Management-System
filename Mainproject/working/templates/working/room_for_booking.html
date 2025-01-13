@@ -1,0 +1,205 @@
+{% extends 'base.html' %}
+
+{% block title %}
+All Rooms Page
+{% endblock %}
+
+{% block style %}
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background: linear-gradient(to bottom, #f9f9f9, #eaeaea);
+        margin: 0;
+        padding: 0;
+    }
+
+    h1 {
+        text-align: center;
+        color: #333;
+        margin: 20px 0;
+        font-size: 2.5rem;
+    }
+
+    .container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+        gap: 40px;
+        padding: 20px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .main {
+        display: flex;
+        flex-direction: column;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        background: white;
+    }
+
+    .main:hover {
+        transform: scale(1.02);
+        box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .imgdiv {
+        width: 100%;
+        height: 250px;
+        position: relative;
+    }
+
+    .img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .info {
+        padding: 20px;
+        text-align: left;
+    }
+
+    .name {
+        font-size: 1.8rem;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .loc {
+        font-size: 1.2rem;
+        margin-bottom: 8px;
+        color: #555;
+    }
+
+    .coun {
+        font-size: 1rem;
+        margin-bottom: 5px;
+        color: #777;
+    }
+
+    .price {
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin: 15px 0;
+    }
+
+    .btn {
+        display: inline-block;
+        background: #007bff;
+        color: white;
+        padding: 10px 20px;
+        font-size: 1rem;
+        border-radius: 5px;
+        text-decoration: none;
+        transition: background 0.3s ease;
+        text-align: center;
+    }
+
+    .btn:hover {
+        background: #0056b3;
+    }
+
+    .empty {
+        font-size: 1.5rem;
+        color: #888;
+        text-align: center;
+        margin-top: 50px;
+    }
+
+    .sorting-form {
+        display: flex;
+        justify-content: center;
+        margin: 20px 0;
+    }
+
+    .sorting-select {
+        padding: 10px;
+        font-size: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<h1>Rooms of the Hotel</h1>
+<div class="sorting-form">
+    <select id="sortPrice" class="sorting-select">
+        <option value="default">Sort By</option>
+        <option value="lowToHigh">Price: Low to High</option>
+        <option value="highToLow">Price: High to Low</option>
+    </select>
+</div>
+
+<div class="container" id="roomContainer">
+    {% if rooms %}
+        {% for ro in rooms %}
+            {% if ro.id not in roomList %}
+            <div class="main" data-price="{{ ro.price_per_night }}">
+                {% if ro.picture %}
+                <div class="imgdiv">
+                    <img class="img" src="{{ ro.picture.url }}" alt="Room Image">
+                </div>
+                {% endif %}
+                <div class="info">
+                    <p class="name">{{ ro.room_type }}</p>
+                    <p class="loc">Room No: {{ ro.room_no }}</p>
+                    <p class="coun">Features: {{ ro.key_features }}</p>
+                    <p class="coun">Air Conditioning: {{ ro.AC|yesno:"Available,Not Available" }}</p>
+                    <p class="price">Price: ₹{{ ro.price_per_night }} / night</p>
+                    <a class="btn" href="reservation/Book-room/{{checkindate}}/{{checkoutdate}}/{{ro.id}}">Book Now</a>
+                </div>
+            </div>
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        <div class="empty">
+            <p>No Rooms Available</p>
+        </div>
+    {% endif %}
+
+    {% for ro in rooms %}
+        {% if ro.id in roomList %}
+        <div class="main">
+            {% if ro.picture %}
+            <div class="imgdiv">
+                <img class="img" src="{{ ro.picture.url }}" alt="Room Image">
+            </div>
+            {% endif %}
+            <div class="info">
+                <p class="name">{{ ro.room_type }}</p>
+                <p class="loc">Room No: {{ ro.room_no }}</p>
+                <p class="coun">Features: {{ ro.key_features }}</p>
+                <p class="coun">Air Conditioning: {{ ro.AC|yesno:"Available,Not Available" }}</p>
+                <p class="price">Price: ₹{{ ro.price_per_night }} / night</p>
+                <a class="btn" style="background: #ccc; cursor: not-allowed;">Already Booked</a>
+            </div>
+        </div>
+        {% endif %}
+    {% endfor %}
+</div>
+
+
+<script>
+    const sortDropdown = document.getElementById('sortPrice');
+    const roomContainer = document.getElementById('roomContainer');
+
+    sortDropdown.addEventListener('change', function () {
+        const rooms = Array.from(roomContainer.getElementsByClassName('main'));
+        const sortValue = this.value;
+
+        if (sortValue === 'lowToHigh') {
+            rooms.sort((a, b) => parseInt(a.dataset.price) - parseInt(b.dataset.price));
+        } else if (sortValue === 'highToLow') {
+            rooms.sort((a, b) => parseInt(b.dataset.price) - parseInt(a.dataset.price));
+        }
+        roomContainer.innerHTML = '';
+        rooms.forEach(room => roomContainer.appendChild(room));
+    });
+</script>
+
+
+{% endblock %}

@@ -1,0 +1,181 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Residency Page
+{% endblock %}
+
+{% block style %}
+<style>
+    body {
+        font-family: 'Georgia', serif;
+        background: #f4f4f0;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 25px;
+        margin: 40px auto;
+        padding: 20px;
+        max-width: 1200px;
+    }
+
+    .main {
+        width: 340px;
+        height: 450px;
+        border-radius: 10px;
+        background: #ffffff;
+        border: 1px solid #ddd;
+        box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        text-align: center;
+        position: relative;
+        transition: all 0.3s ease-in-out;
+    }
+
+    .main:hover {
+        transform: translateY(-5px);
+        box-shadow: 7px 7px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .imgdiv {
+        width: 100%;
+        height: 60%;
+        overflow: hidden;
+        background: #f4f4f0;
+        border-bottom: 1px solid #ccc;
+    }
+
+    .img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.4s ease-in-out;
+    }
+
+    .main:hover .img {
+        transform: scale(1.05);
+    }
+
+    .info {
+        padding: 20px 15px;
+    }
+
+    .name {
+        font-size: 1.4rem;
+        font-weight: bold;
+        color: #2e3b3a;
+        margin-bottom: 8px;
+    }
+
+    .loc {
+        font-size: 1rem;
+        color: #6b7a77;
+        margin: 5px 0;
+    }
+
+    .coun {
+        font-size: 0.9rem;
+        color: #8a9b97;
+        font-style: italic;
+    }
+
+    .btn {
+        display: inline-block;
+        margin-top: 15px;
+        padding: 10px 20px;
+        font-size: 1rem;
+        color: #fff;
+        background: #4b644a;
+        border-radius: 5px;
+        text-decoration: none;
+        transition: all 0.3s ease-in-out;
+    }
+
+    .btn:hover {
+        background: #3a5139;
+    }
+
+    .empty {
+        font-size: 1.3rem;
+        color: #999;
+        text-align: center;
+        margin-top: 50px;
+    }
+
+    /* Date Input Styling */
+    .date-input-container {
+        width: 100%;
+        text-align: center;
+        margin: 20px 0;
+    }
+
+    .date-input {
+        padding: 10px 15px;
+        font-size: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        width: 80%;
+        max-width: 300px;
+        background: #f4f4f0;
+        transition: border-color 0.3s ease-in-out;
+    }
+
+    .date-input:focus {
+        outline: none;
+        border-color: #4b644a;
+        box-shadow: 0 0 5px rgba(75, 100, 74, 0.5);
+    }
+
+    .date-input-label {
+        font-size: 1.1rem;
+        color: #333;
+        margin-bottom: 10px;
+        display: block;
+        font-weight: bold;
+    }
+</style>
+{% endblock %}
+
+
+{% block content %}
+
+<div>
+    <form action="" method="post">
+        {% csrf_token %}
+    {{form.as_p}}
+        <input type="submit" value="submit"/>
+    </form>
+</div>
+
+<h1 style="text-align: center; color: #333; margin: 20px 0; font-size: 2.5rem;">
+    All Residencies for Customers
+</h1>
+
+
+<div class="container">
+    {% for res in resi %}
+    <div class="main">
+        {% if res.logo %}
+        <div class="imgdiv">
+            <img class="img" src="{{ res.logo.url }}" alt="{{ res.name }} Logo">
+        </div>
+        {% endif %}
+        <div class="info">
+            <p class="name">{{ res.name }}</p>
+            <p class="loc">{{ res.city }}</p>
+            <p class="coun">{{ res.state }}, {{ res.country }}</p>
+            <a class="btn" href="/working/rooms-user/{{res.id}}">View Rooms</a>
+        </div>
+    </div>
+    {% empty %}
+    <div class="empty">
+        <p>No Residencies Found</p>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

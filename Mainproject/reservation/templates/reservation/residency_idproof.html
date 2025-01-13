@@ -1,0 +1,74 @@
+{% extends 'hotel.html' %}
+
+{% block title %}
+all Rooms Page
+{% endblock %}
+
+{% block style %}
+.main {
+    width: 70%;
+    border-radius: 3%;
+    height: 40vh;
+    display: flex;
+    background-color: bisque;
+    margin: 20px auto;
+    box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+}
+
+.main:hover{
+    height: 45vh;
+    width: 80%;
+    transition-duration: 0.5s;
+    font-size:7vh
+}
+
+.img {
+    display: inline-block;
+    height: 100%;
+    width: 95%;
+    border-radius: 6%;
+}
+
+.name {
+    font-size: 6vh;
+}
+
+.loc {
+    font-size: 4vh;
+}
+
+
+.imgdiv {
+    width: 50%;
+    height: 100%;
+    align-content: center;
+    margin-left: 1%;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px; 
+}
+{% endblock %}
+
+{% block content %}
+
+<h1>all Residency id proofs </h1>
+<div class="container">
+    {% for id in idproof %}
+    <div class="main">
+        <div>
+            <!-- <a href="/rooms/{{res.id}}"></a> -->
+            <p class="name">{{ id.residency }} </p>
+            <div style=" width: 70%; margin-top: 2%;  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;"> 
+            <p class="name">{{ id.id_proof }} </p>
+            </div>
+
+        </div>
+    </div>
+        
+        {% endfor %}
+
+{% endblock %}
