@@ -6,176 +6,291 @@ Residency Page
 
 {% block style %}
 <style>
-    body {
-        font-family: 'Georgia', serif;
-        background: #f4f4f0;
-        margin: 0;
-        padding: 0;
+    :root {
+        --card-bg: #ffffff;
+        --card-shadow: rgba(0, 0, 0, 0.1);
+        --card-border: #ddd;
+        --text-primary: #2c3e50;
+        --text-secondary: #34495e;
+        --text-muted: #7f8c8d;
+        --accent: #c0392b;
+        --hover-bg: #f8f9fa;
     }
 
-    .container {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 25px;
-        margin: 40px auto;
-        padding: 20px;
+    .residency-header {
+        text-align: center;
+        padding: 2rem 0;
+        background: var(--dark-bg);
+        color: var(--text-light);
+        margin-bottom: 2rem;
+    }
+
+    .residency-header h1 {
+        font-family: 'Playfair Display', serif;
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .search-form-container {
+        background: white;
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        margin: 0 auto 3rem;
         max-width: 1200px;
     }
 
-    .main {
-        width: 340px;
-        height: 450px;
+    .search-form {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        align-items: end;
+    }
+
+    .form-group {
+        margin-bottom: 0;
+    }
+
+    .form-group p {
+        margin: 0;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: var(--text-primary);
+        font-weight: 500;
+        font-size: 0.95rem;
+    }
+
+    .form-group input,
+    .form-group select {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 1px solid var(--card-border);
+        border-radius: 8px;
+        font-size: 1rem;
+        background-color: #f8f9fa;
+        color: var(--text-primary);
+        transition: all 0.3s ease;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(192, 57, 43, 0.1);
+        background-color: white;
+    }
+
+    .form-group select {
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%232c3e50' viewBox='0 0 16 16'%3E%3Cpath d='M8 11.5l-5-5h10l-5 5z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 1rem center;
+        padding-right: 2.5rem;
+    }
+
+    .submit-btn {
+        background: var(--accent);
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        width: 100%;
+        height: 45px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .submit-btn:hover {
+        background: #a93226;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(169, 50, 38, 0.2);
+    }
+
+    .residency-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 2rem;
+        padding: 2rem;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .residency-card {
+        background: var(--card-bg);
         border-radius: 10px;
-        background: #ffffff;
-        border: 1px solid #ddd;
-        box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
         overflow: hidden;
-        text-align: center;
-        position: relative;
-        transition: all 0.3s ease-in-out;
-    }
-
-    .main:hover {
-        transform: translateY(-5px);
-        box-shadow: 7px 7px 15px rgba(0, 0, 0, 0.2);
-    }
-
-    .imgdiv {
-        width: 100%;
-        height: 60%;
-        overflow: hidden;
-        background: #f4f4f0;
-        border-bottom: 1px solid #ccc;
-    }
-
-    .img {
-        width: 100%;
+        box-shadow: 0 4px 6px var(--card-shadow);
+        transition: all 0.3s ease;
         height: 100%;
-        object-fit: cover;
-        transition: transform 0.4s ease-in-out;
+        display: flex;
+        flex-direction: column;
     }
 
-    .main:hover .img {
+    .residency-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 12px var(--card-shadow);
+    }
+
+    .residency-image {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+
+    .residency-card:hover .residency-image {
         transform: scale(1.05);
     }
 
-    .info {
-        padding: 20px 15px;
+    .residency-content {
+        padding: 1.5rem;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
     }
 
-    .name {
+    .residency-name {
+        font-family: 'Playfair Display', serif;
         font-size: 1.4rem;
-        font-weight: bold;
-        color: #2e3b3a;
-        margin-bottom: 8px;
+        color: var(--text-primary);
+        margin-bottom: 0.5rem;
     }
 
-    .loc {
-        font-size: 1rem;
-        color: #6b7a77;
-        margin: 5px 0;
+    .residency-location {
+        color: var(--text-secondary);
+        margin-bottom: 0.5rem;
     }
 
-    .coun {
-        font-size: 0.9rem;
-        color: #8a9b97;
+    .residency-country {
+        color: var(--text-muted);
         font-style: italic;
+        margin-bottom: 1.5rem;
     }
 
-    .btn {
-        display: inline-block;
-        margin-top: 15px;
-        padding: 10px 20px;
-        font-size: 1rem;
-        color: #fff;
-        background: #4b644a;
-        border-radius: 5px;
+    .view-rooms-btn {
+        margin-top: auto;
+        background: var(--dark-bg);
+        color: white;
         text-decoration: none;
-        transition: all 0.3s ease-in-out;
-    }
-
-    .btn:hover {
-        background: #3a5139;
-    }
-
-    .empty {
-        font-size: 1.3rem;
-        color: #999;
-        text-align: center;
-        margin-top: 50px;
-    }
-
-    /* Date Input Styling */
-    .date-input-container {
-        width: 100%;
-        text-align: center;
-        margin: 20px 0;
-    }
-
-    .date-input {
-        padding: 10px 15px;
-        font-size: 1rem;
-        border: 1px solid #ccc;
+        padding: 0.75rem 1.5rem;
         border-radius: 5px;
-        width: 80%;
-        max-width: 300px;
-        background: #f4f4f0;
-        transition: border-color 0.3s ease-in-out;
+        text-align: center;
+        transition: all 0.3s ease;
     }
 
-    .date-input:focus {
-        outline: none;
-        border-color: #4b644a;
-        box-shadow: 0 0 5px rgba(75, 100, 74, 0.5);
+    .view-rooms-btn:hover {
+        background: var(--accent);
+        transform: translateY(-2px);
     }
 
-    .date-input-label {
-        font-size: 1.1rem;
-        color: #333;
-        margin-bottom: 10px;
-        display: block;
-        font-weight: bold;
+    .empty-state {
+        text-align: center;
+        padding: 3rem;
+        color: var(--text-muted);
+        font-size: 1.2rem;
+    }
+
+    @media (max-width: 768px) {
+        .search-form {
+            grid-template-columns: 1fr;
+        }
+
+        .search-form-container {
+            margin: 1rem;
+            padding: 1.5rem;
+        }
+
+        .residency-grid {
+            grid-template-columns: 1fr;
+            padding: 1rem;
+        }
+
+        .residency-header h1 {
+            font-size: 2rem;
+        }
     }
 </style>
 {% endblock %}
 
-
 {% block content %}
+<div class="residency-header">
+    <h1>Discover Your Perfect Stay</h1>
+</div>
 
-<div>
-    <form action="" method="post">
+<div class="search-form-container">
+    <form action="" method="post" class="search-form">
         {% csrf_token %}
-    {{form.as_p}}
-        <input type="submit" value="submit"/>
+        {% for field in form %}
+        <div class="form-group">
+            {{ field.label_tag }}
+            {{ field }}
+            {% if field.errors %}
+            <div class="error-message">
+                {{ field.errors }}
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+        <div class="form-group">
+            <button type="submit" class="submit-btn">Search Residencies</button>
+        </div>
     </form>
 </div>
 
-<h1 style="text-align: center; color: #333; margin: 20px 0; font-size: 2.5rem;">
-    All Residencies for Customers
-</h1>
-
-
-<div class="container">
-    {% for res in resi %}
-    <div class="main">
-        {% if res.logo %}
-        <div class="imgdiv">
-            <img class="img" src="{{ res.logo.url }}" alt="{{ res.name }} Logo">
+{% if messages %}
+<div class="messages">
+    {% for message in messages %}
+        <div class="message {% if message.tags %}{{ message.tags }}{% endif %}">
+            <span class="close-btn" onclick="closeMessage(this)">×</span>
+            {{ message }}
         </div>
-        {% endif %}
-        <div class="info">
-            <p class="name">{{ res.name }}</p>
-            <p class="loc">{{ res.city }}</p>
-            <p class="coun">{{ res.state }}, {{ res.country }}</p>
-            <a class="btn" href="/working/rooms-user/{{res.id}}">View Rooms</a>
-        </div>
-    </div>
-    {% empty %}
-    <div class="empty">
-        <p>No Residencies Found</p>
-    </div>
     {% endfor %}
 </div>
+{% endif %}
 
+
+<div class="residency-grid">
+    {% if resi %}
+        {% for res in resi %}
+            {% if res.id not in a %}
+                <div class="residency-card">
+                    {% if res.logo %}
+                    <div class="residency-image-container">
+                        <img class="residency-image" src="{{ res.logo.url }}" alt="{{ res.name }} Logo">
+                    </div>
+                    {% endif %}
+                    <div class="residency-content">
+                        <h2 class="residency-name">{{ res.name }}</h2>
+                        <p class="residency-location">{{ res.city }}</p>
+                        <p class="residency-country">{{ res.state }}, {{ res.country }}</p>
+                        <a class="view-rooms-btn" href="/working/rooms-user/{{ res.id }}">View Rooms</a>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        <div class="empty-state">
+            <p>No Residencies Found</p>
+        </div>
+    {% endif %}
+</div>
+
+</div>
+
+
+<script>
+    function closeMessage(element) {
+        var message = element.parentElement;
+        message.style.display = "none";
+    }
+</script>
 {% endblock %}
+
+
+

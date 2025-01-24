@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block title %} Payment Failed {% endblock %}
+
+{% block style %}
+<style>
+    .payment-failed-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 70vh;
+        background-color: #f8f9fa;
+        padding: 20px;
+    }
+
+    .payment-failed-content {
+        text-align: center;
+        background-color: white;
+        border-radius: 12px;
+        padding: 50px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        max-width: 600px;
+        width: 100%;
+    }
+
+    .payment-failed-icon {
+        font-size: 6rem;
+        color: #e74c3c;
+        margin-bottom: 20px;
+    }
+
+    .payment-failed-message {
+        font-size: 1.4rem;
+        color: #2c3e50;
+        margin-bottom: 30px;
+        line-height: 1.6;
+    }
+
+    .payment-retry-btn {
+        display: inline-block;
+        background-color: #3498db;
+        color: white;
+        padding: 12px 30px;
+        text-decoration: none;
+        border-radius: 8px;
+        transition: background-color 0.3s ease;
+    }
+
+    .payment-retry-btn:hover {
+        background-color: #2980b9;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="payment-failed-container">
+    <div class="payment-failed-content">
+        <div class="payment-failed-icon">⚠️</div>
+        <h2 class="payment-failed-message">
+            Unfortunately, your payment could not be processed. 
+            Please check your payment details and try again.
+        </h2>
+        <a href="/payment" class="payment-retry-btn">Retry Payment</a>
+    </div>
+</div>
+{% endblock %}

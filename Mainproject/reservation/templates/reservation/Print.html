@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Booking Receipt {{ book.booking_id }}</title>
+    <style>
+        /* Reset default styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Main styles */
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            line-height: 1.6;
+            padding: 40px;
+            background-color: white;
+        }
+
+        .receipt {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            padding: 20px;
+            background-color: #1a237e;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .booking-id {
+            font-size: 16px;
+            color: #ffffff;
+        }
+
+        .section {
+            margin-bottom: 30px;
+            border: 1px solid #ddd;
+            padding: 20px;
+            background-color: #fff;
+        }
+
+        .section-title {
+            color: #1a237e;
+            font-size: 18px;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #1a237e;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .label {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .value {
+            color: #666;
+        }
+
+        .terms-section {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+        }
+
+        .terms-title {
+            color: #1a237e;
+            font-size: 18px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .terms-list {
+            list-style-type: none;
+        }
+
+        .terms-item {
+            margin-bottom: 10px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .terms-item:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #1a237e;
+        }
+
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            padding: 20px;
+            border-top: 2px solid #eee;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="receipt">
+        <div class="header">
+            <h1>Booking Confirmation</h1>
+            <div class="booking-id">Booking ID: {{ book.booking_id }}</div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Guest Information</h2>
+            <div class="detail-row">
+                <span class="label">Guest Name:</span>
+                <span class="value">{{ book.name }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="label">Booking Date:</span>
+                <span class="value">{{ book.booked_on }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="label">Check-In Date:</span>
+                <span class="value">{{ book.check_in_date }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="label">Check-out Date:</span>
+                <span class="value">{{ book.check_out_date }}</span>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Room Details</h2>
+            <div class="detail-row">
+                <span class="label">Residency:</span>
+                <span class="value">{{ book.room_details.residency.Namee }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="label">Room Type:</span>
+                <span class="value">{{ book.room_details.room_type.Namee }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="label">Room Number:</span>
+                <span class="value">{{ book.room_details.room_no }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="label">Price per Night:</span>
+                <span class="value">₹{{ book.room_details.price_per_night }}</span>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Key Features</h2>
+            <div class="detail-row">
+                <span class="value">{{ book.room_details.key_features }}</span>
+            </div>
+        </div>
+
+        <div class="terms-section">
+            <div class="terms-title">Booking Terms</div>
+            <ul class="terms-list">
+                <li class="terms-item">Valid ID proof required at check-in</li>
+                <li class="terms-item">Guests must be 18 or older</li>
+                <li class="terms-item">Check-in: 12:00 PM, Check-out: 11:00 AM</li>
+                <li class="terms-item">Payment required at check-in</li>
+                <li class="terms-item">No smoking or alcohol in rooms</li>
+                <li class="terms-item">Guests liable for any damage</li>
+            </ul>
+        </div>
+
+        <div class="footer">
+            Thank you for choosing our services. For any assistance, please contact our support team.
+        </div>
+    </div>
+</body>
+</html>

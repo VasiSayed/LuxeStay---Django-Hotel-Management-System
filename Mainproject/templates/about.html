@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+
+{% block title %}
+About Us - LuxeStay
+{% endblock %}
+
+{% block style %}
+
+    body {
+        font-family: 'Arial', sans-serif;
+        line-height: 1.6;
+        margin: 0;
+        padding: 0;
+        background-color: #f7f7f7;
+    }
+    .container {
+        width: 90%;
+        margin: 20px auto;
+        border-radius: 8px;
+    }
+    h1 {
+        color: #2c3e50;
+        text-align: center;
+        font-size: 2.5rem;
+        margin-bottom: 20px;
+    }
+    .about-section {
+        margin: 20px 0;
+    }
+    .about-section h2 {
+        color: #3498db;
+        margin-bottom: 10px;
+    }
+    .about-section p {
+        color: #555;
+        font-size: 1rem;
+    }
+    .mission-vision {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        margin: 30px 0;
+    }
+    .mission, .vision {
+        flex: 1;
+        min-width: 300px;
+        background: #ecf0f1;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    .mission h3, .vision h3 {
+        margin-bottom: 15px;
+        color: #34495e;
+    }
+    footer {
+        text-align: center;
+        padding: 20px 0;
+        background: #2c3e50;
+        color: white;
+        margin-top: 20px;
+    }
+    footer a {
+        color: #3498db;
+        text-decoration: none;
+    }
+
+{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        <h1>About Us</h1>
+
+        <div class="about-section">
+            <h2>Welcome to LuxeStay</h2>
+            <p>
+                At LuxeStay, we are committed to providing a seamless, hassle-free platform for finding and booking premium residential spaces. 
+                Our goal is to connect individuals with high-quality residencies that suit their lifestyle and budget.
+            </p>
+            <p>
+                With a focus on user experience, we make it easy to explore residencies, check availability, and book your stay—all from one platform.
+            </p>
+        </div>
+
+        <div class="about-section">
+            <h2>Our Story</h2>
+            <p>
+                We started with a single hotel, **Tanaji Residency**, with a vision to redefine the hospitality experience. 
+                Over the years, we have grown into LuxeStay—a platform that connects guests with high-quality residential options across multiple locations.
+            </p>
+            <p>
+                Built on trust and innovation, LuxeStay aims to offer a blend of comfort, affordability, and premium service. 
+                Our journey is fueled by our commitment to transforming the way people discover and book residencies.
+            </p>
+        </div>
+
+        <div class="mission-vision">
+            <div class="mission">
+                <h3>Our Mission</h3>
+                <p>
+                    To provide a platform where users can easily discover, evaluate, and book residencies that meet their needs while ensuring
+                    exceptional customer support and trust.
+                </p>
+            </div>
+            <div class="vision">
+                <h3>Our Vision</h3>
+                <p>
+                    To redefine the experience of booking residencies by leveraging technology, trust, and transparency, making the process
+                    convenient and accessible for everyone.
+                </p>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

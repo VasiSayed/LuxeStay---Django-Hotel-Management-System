@@ -134,6 +134,46 @@
         min-height: 120px;
         resize: vertical;
     }
+
+    .message {
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    font-size: 16px;
+    width: 100%;
+    max-width: 500px;
+    margin: 10px auto;
+    position: relative;
+}
+
+.message.error {
+    background-color: #e74c3c;
+    color: white;
+    border-left: 5px solid #c0392b;
+}
+
+.message.success {
+    background-color: #2ecc71;
+    color: white;
+    border-left: 5px solid #27ae60;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.close-btn:hover {
+    color: black;
+}
+
 </style>
 {% endblock %}
 
@@ -143,18 +183,15 @@
         <div class="form-header">
             <h2>{{ title }}</h2>
         </div>
+        
+
+
         <div class="form-body">
             <form action="" method="post" enctype="multipart/form-data">
+                
                 {% csrf_token %}
                 {% for field in form %}
                     <div class="form-group">
-                        {% if field.errors %}
-                            {% for error in field.errors %}
-                                <div class="error-message">
-                                    {{ error }}
-                                </div>
-                            {% endfor %}
-                        {% endif %}
                         <label for="{{ field.id_for_label }}" class="form-label">
                             {{ field.label }}
                             {% if field.field.required %}
@@ -175,6 +212,19 @@
                         {% endif %}
                     </div>
                 {% endfor %}
+
+                {% if messages %}
+                <div class="messages">
+                    {% for message in messages %}
+                        <div class="message {% if message.tags %}{{ message.tags }}{% endif %}">
+                            <span class="close-btn" onclick="closeMessage(this)">×</span>
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            
+
                 <div class="text-center mt-4">
                     <button type="submit" class="submit-btn">
                         Create {{ title }}
@@ -184,4 +234,13 @@
         </div>
     </div>
 </div>
+
+
+<script>
+    function closeMessage(element) {
+        var message = element.parentElement;
+        message.style.display = "none";
+    }
+</script>
+
 {% endblock %}

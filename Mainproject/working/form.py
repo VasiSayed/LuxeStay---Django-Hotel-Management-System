@@ -2,6 +2,23 @@ from django.forms import ModelForm
 from .models import Residency,Room_details,Room_type
 from django import forms
 
+Aminties = [
+        ('AC', 'AC'),  
+        ('Heating', 'Heating'),
+        ('Wi-Fi', 'Wi-Fi'),
+        ('Television', 'Television'),
+        ('Refrigerator', 'Refrigerator'),
+        ('Microwave', 'Microwave'),
+        ('Balcony', 'Balcony'),
+        ('Private Bathroom', 'Private Bathroom'),
+        ('Parking', 'Parking'),
+        ('Kitchenette', 'Kitchenette'),
+        ('Swimming Pool Access', 'Swimming Pool Access'),
+        ('Gym Access', 'Gym Access'),
+        ('Room Service', 'Room Service'),
+    ]
+
+
 class ResidencyForm(ModelForm):
     class Meta:
         model=Residency
@@ -21,9 +38,10 @@ class CreateRoomTypeForm(ModelForm):
             self.fields['residency'].queryset = Residency.objects.none()  
 
 class Create_Room_forms(ModelForm):
+    key_features=forms.MultipleChoiceField(choices=Aminties,widget=forms.CheckboxSelectMultiple)
     class Meta:
         model=Room_details
-        fields="__all__"
+        exclude=("key_features",'no_new','disable',)
     def __init__(self,*args,**kwargs):
         user=kwargs.pop("user",None)
         super().__init__(*args,**kwargs)

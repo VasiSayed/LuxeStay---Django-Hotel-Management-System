@@ -6,12 +6,10 @@ Luxury Accommodations | Classic Collection
 {% endblock %}
 
 
-{% include 'bookingoptionU.html' %}
-
-
 {% block style %}
+
 <style>
-    :root {
+  :root {
         --primary-color: #2c1810;
         --secondary-color: #8b7355;
         --accent-color: #c1a173;
@@ -27,22 +25,24 @@ Luxury Accommodations | Classic Collection
 
     body {
         font-family: 'Montserrat', sans-serif;
-        background-color: var(--cream);
-        background-image: 
+        /* background-color: var(--cream); */
+        /* background-image: 
             linear-gradient(rgba(250, 243, 224, 0.9), rgba(250, 243, 224, 0.9)),
-            url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23d4b483' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23d4b483' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); */
         margin: 0;
         padding: 0;
         color: var(--text-primary);
         line-height: 1.6;
     }
 
+    
     .page-header {
         text-align: center;
-        padding: 60px 20px;
+        padding: 40px 20px;
         background: linear-gradient(to bottom, transparent, var(--dark-cream));
-        margin-bottom: 40px;
+        margin-bottom: 30px;
     }
+    
 
     h1 {
         font-family: 'Cormorant Garamond', serif;
@@ -76,7 +76,7 @@ Luxury Accommodations | Classic Collection
     .container {
         max-width: 1400px;
         margin: 0 auto;
-        padding: 0 40px 60px;
+        /* padding: 0 40px 60px; */
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
         gap: 50px;
@@ -295,7 +295,7 @@ Luxury Accommodations | Classic Collection
 }
 
 .filter-button:hover {
-    background-color: var(--gold);
+    background-color: var(--secondary-color);
 }
 
 .booking-grid {
@@ -317,6 +317,68 @@ Luxury Accommodations | Classic Collection
     margin-bottom: 10px;
 }
 
+.message {
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    font-size: 16px;
+    width: 100%;
+    max-width: 500px;
+    margin: 10px auto;
+    position: relative;
+}
+
+.message.error {
+    background-color: #e74c3c;
+    color: white;
+    border-left: 5px solid #c0392b;
+}
+
+.message.success {
+    background-color: #2ecc71;
+    color: white;
+    border-left: 5px solid #27ae60;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.close-btn:hover {
+    color: black;
+}
+
+.shut-badg {
+
+    background: rgb(51, 126, 51);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    font-weight: bold;
+    text-transform: uppercase;
+    z-index: 10;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.shut-badge {
+    background: #ff4444;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    font-weight: bold;
+    text-transform: uppercase;
+    z-index: 10;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
 </style>
 {% endblock %}
 
@@ -330,7 +392,20 @@ Luxury Accommodations | Classic Collection
     <a href="/working/Previous-booking"><button id="previous-btn" class="filter-button">Previous Booking</button></a>
 </div>
 
-<div class="container">
+
+{% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+            <div class="message {% if message.tags %}{{ message.tags }}{% endif %}">
+                <span class="close-btn" onclick="closeMessage(this)">×</span>
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+
+<div class="container" style="margin-bottom: 15%;">
     {% for bo in book %}
     <article class="room-card">
         {% if bo.picture %}
@@ -339,7 +414,7 @@ Luxury Accommodations | Classic Collection
         </div>
         {% endif %}
         <div class="room-details">
-            <h2 class="room-name">{{ bo.room_details.residency.name }}</h2>
+    <h2 class="room-name">{{ bo.room_details.residency.name }}</h2>
             <h2 class="room-name">{{ bo.name }}</h2>
             <div class="detail-item">
                 <span class="detail-label">Guests:</span>
@@ -347,27 +422,36 @@ Luxury Accommodations | Classic Collection
             </div>
             <div class="detail-item">
                 <span class="detail-label">Amenities:</span>
-                {% if bo.room_details.Ac  %}
-                <span>{{ bo.room_details.Ac }}</span>
-                {% else %}
-                <span>AC : No</span>
-                {% endif %}
+                <span>{{ bo.room_details.key_features }}</span>
             </div>
-            <p class="availability">ChecK-In-Date {{ bo.check_in_date }}</p>
+            <p class="availability">Available from {{ bo.check_in_date }}</p>
             <p class="availability">Check-out-date{{ bo.check_out_date }}</p>
             <div class="detail-item">
-                <span class="detail-label">Id Proof</span>
-                <span>{{ bo.idproof }}</span>
+                <span class="detail-label">Booking Status:</span>
+                {% if bo.payment_status == "Successfull" %}
+                <div class="shut-badg"><span>{{ bo.payment_status }}</span></div>
+                {% else %}
+                <div class="shut-badge"><span>{{ bo.payment_status }}</span></div>
+                {% endif %}
             </div>
             <div class="button-wrapper">
+                
                 <a class="view-details" href="/reservation/booking-recipt/{{bo.id}}">View Details</a>
             </div>
         </div>
     </article>
     {% empty %}
     <div class="no-rooms">
-        <p>No Booking Available at the Moment</p>
+        <p>No Luxury Accommodations Available at the Moment</p>
     </div>
     {% endfor %}
-</div>
+</div >
+
+<script>
+    function closeMessage(element) {
+        var message = element.parentElement;
+        message.style.display = "none";
+    }
+</script>
+
 {% endblock %}

@@ -1,139 +1,341 @@
 {% extends 'base.html' %}
 
 {% block title %}
-All Rooms Page
+All Rooms 
 {% endblock %}
 
 {% block style %}
-<style>
+<!-- body {
+    font-family: 'Raleway', sans-serif;
+    background: linear-gradient(135deg, #f7f9fc 0%, #edf2f7 100%);
+    margin: 0; -->
+    <!-- padding: 2rem 0;-->
+<!-- } -->
+
+h1 {
+    text-align: center;
+    color: #444;
+    margin: 2rem 0 2rem;
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    position: relative;
+}
+
+h1::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 3px;
+    background: #3498db;
+}
+
+
+#room_n {
+    display: grid;
+    grid-template-rows: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    padding: 0 1.5rem;
+    max-width: 1200px; /* Increased width for better layout */
+    margin: 0 auto;
+}
+
+
+.main:hover .img {
+    transform: scale(1.05);
+}
+
+
+.main {
+    display: flex;
+    align-items: flex-start; 
+    gap: 1.5rem; 
+    border: 1px solid #ddd; 
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+}
+
+
+.imgdiv {
+    flex: 0 0 40%;
+    max-width: 40%; 
+    height: auto;
+}
+
+
+.img {
+    width: 100%; /* Makes the image responsive */
+    height: auto; /* Ensures aspect ratio is preserved */
+    border-radius: 8px; /* Adds rounded corners */
+}
+
+
+.info {
+    flex: 1; /* Takes up the remaining 60% of space */
+}
+
+
+.features {
+    margin: 0.8rem 0;
+    padding: 0.8rem;
+    background: #f4f7fa;
+    border-radius: 8px;
+}
+
+.features-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 0.6rem;
+}
+
+.features-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.feature {
+    background-color: #eee;
+    color: #444;
+    font-size: 0.85rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    display: inline-flex;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+.price {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #333;
+    margin: 0.4rem 0;
+}
+
+.features-list {
+    display: flex;
+    flex-wrap: wrap; /* Wraps features if they exceed the available space */
+    gap: 0.5rem; /* Adds space between features */
+}
+
+.info {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #333;
+    margin: 0;
+}
+
+.loc {
+    font-size: 1rem;
+    color: #555;
+    margin: 0;
+}
+
+.coun {
+    font-size: 0.95rem;
+    color: #666;
+    margin: 0;
+}
+
+.main:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+}
+
+.btn {
+    display: inline-block;
+    background: var(--dark-bg);
+    color: white;
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    font-weight: 500;
+    border-radius: 8px;
+    text-decoration: none;
+    text-align: center;
+    transition: all 0.3s ease;
+    border: 2px solid var(--dark-bg);
+    margin-top: 0.5rem;
+}
+
+.btn:hover {
+    background: transparent;
+    color: var(--dark-bg);
+    transform: translateY(-2px);
+} 
+
+
+.empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 2rem;
+    font-size: 1.2rem;
+    color: #666;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.message {
+    padding: 0.8rem 1rem;
+    border-radius: 8px;
+    margin: 0 auto 1.5rem;
+    font-size: 0.95rem;
+    width: 100%;
+    max-width: 600px;
+    position: relative;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.message.error {
+    background-color: #ff6b6b;
+    color: white;
+    border-left: 5px solid #ee5253;
+}
+
+.message.success {
+    background-color: #1dd1a1;
+    color: white;
+    border-left: 5px solid #10ac84;
+}
+
+.close-btn {
+    position: absolute;
+    top: 50%;
+    right: 1rem;
+    transform: translateY(-50%);
+    font-size: 1.2rem;
+    color: white;
+    background: none;
+    border: none;
+    cursor: pointer;
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+}
+
+.close-btn:hover {
+    opacity: 1;
+}
+
+@media (max-width: 768px) {
     body {
-        font-family: 'Arial', sans-serif;
-        background: linear-gradient(to bottom, #f9f9f9, #eaeaea);
-        margin: 0;
-        padding: 0;
+        padding: 1.5rem 0;
     }
 
     h1 {
-        text-align: center;
-        color: #333;
-        margin: 20px 0;
-        font-size: 2.5rem;
+        font-size: 2.2rem;
+        margin-bottom: 1.8rem;
     }
 
     .container {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-        gap: 40px;
-        padding: 20px;
-        max-width: 1400px;
-        margin: 0 auto;
-    }
-
-    .main {
-        display: flex;
-        flex-direction: column;
-        border-radius: 20px;
-        overflow: hidden;
-        box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        background: white;
-    }
-
-    .main:hover {
-        transform: scale(1.02);
-        box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.3);
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        padding: 0 1rem;
     }
 
     .imgdiv {
-        width: 100%;
-        height: 250px;
-        position: relative;
-    }
-
-    .img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
+        height: 220px;
     }
 
     .info {
-        padding: 20px;
-        text-align: left;
+        padding: 1.2rem;
     }
 
     .name {
-        font-size: 1.8rem;
-        font-weight: bold;
-        margin-bottom: 10px;
+        font-size: 1.4rem;
     }
 
-    .loc {
-        font-size: 1.2rem;
-        margin-bottom: 8px;
-        color: #555;
+    .features {
+        padding: 0.6rem;
     }
 
-    .coun {
-        font-size: 1rem;
-        margin-bottom: 5px;
-        color: #777;
+    .feature {
+        font-size: 0.8rem;
+        padding: 0.3rem 0.7rem;
     }
 
     .price {
-        font-size: 1.5rem;
-        font-weight: bold;
-        margin: 15px 0;
+        font-size: 1.2rem;
     }
 
-    .btn {
-        display: inline-block;
-        background: #007bff;
-        color: white;
-        padding: 10px 20px;
-        font-size: 1rem;
-        border-radius: 5px;
-        text-decoration: none;
-        transition: background 0.3s ease;
-        text-align: center;
-    }
+    
+}
 
-    .btn:hover {
-        background: #0056b3;
-    }
 
-    .empty {
-        font-size: 1.5rem;
-        color: #888;
-        text-align: center;
-        margin-top: 50px;
-    }
-</style>
 {% endblock %}
 
 {% block content %}
-<h1>Rooms of the Hotel</h1>
-<div class="container">
-    {% for ro in rooms %}
-        <div class="main">
-            {% if ro.picture %}
-            <div class="imgdiv">
-                <img class="img" src="{{ ro.picture.url }}" alt="Room Image">
+<h1>Our Luxury Rooms</h1>
+
+{% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+            <div class="message {% if message.tags %}{{ message.tags }}{% endif %}">
+                {{ message }}
+                <button class="close-btn" onclick="closeMessage(this.parentElement)">×</button>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+<div class="container" id="room_n">
+    {% if rooms %}
+        {% for ro in rooms %}
+            {% if ro.id not in dis %}
+            <div class="main">
+                {% if ro.picture %}
+                <div class="imgdiv">
+                    <img class="img" src="{{ ro.picture.url }}" alt="{{ ro.room_type }}">
+                </div>
+                {% endif %}
+                <div class="info">
+                    <p class="name">{{ ro.room_type }}</p>
+                    <p class="loc">Room No: {{ ro.room_no }}</p>
+                    <p class="coun">No of Guest: {{ ro.max_guest }}</p>
+                    <div class="features">
+                        <p class="features-title">Key Features:</p>
+                        <div class="features-list">
+                            {% if ro.key_features_list %}
+                                {% for feature in ro.key_features_list %}
+                                    <span class="feature">{{ feature }}</span>
+                                {% endfor %}
+                            {% else %}
+                                <span class="feature">No features available</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <p class="price">₹{{ ro.price_per_night }} / night</p>
+                    <a class="btn" href="{% url 'final_booking_rooms' ro.id %}">Reserve Now</a>
+                </div>
             </div>
             {% endif %}
-            <div class="info">
-                <p class="name">{{ ro.room_type }}</p>
-                <p class="loc">Room No: {{ ro.room_no }}</p>
-                <p class="coun">Features: {{ ro.key_features }}</p>
-                <p class="coun">Air Conditioning: {{ ro.AC|yesno:"Available,Not Available" }}</p>
-                <p class="price">Price: ₹{{ ro.price_per_night }} / night</p>
-                <a class="btn" href="{% url 'final_booking_rooms' ro.id %}">Reserve</a>
-            </div>
-        </div>
-    
-    {% empty %}
+        {% endfor %}
+    {% else %}
         <div class="empty">
-            <p>No Rooms Avaliable</p>
+            <p>No Rooms Available at the Moment</p>
         </div>
-    {% endfor %}
+    {% endif %}
+</div>
 
+
+<script>
+    function closeMessage(element) {
+        element.style.opacity = '0';
+        setTimeout(() => {
+            element.style.display = 'none';
+        }, 300);
+    }
+</script>
 {% endblock %}

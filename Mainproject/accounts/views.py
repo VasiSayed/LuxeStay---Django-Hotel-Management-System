@@ -1,10 +1,80 @@
 from django.shortcuts import render,redirect
-from .form import LoginForm,RegistrationForm
+from .form import LoginForm,RegistrationForm,ChangePasswordFOrm
 from django.views import View
 from django.contrib.auth import login,logout,authenticate
 from django.contrib import messages
 from django.core.mail import send_mail
+from datetime import date
+from datetime import timedelta
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth import password_validation
+from django.contrib.auth.hashers import make_password
+from django.core.exceptions import ValidationError
 # Create your views here.
+
+class ChangePassword(LoginRequiredMixin,View):
+    login_url='login'
+    def get(self,request):
+        form=ChangePasswordFOrm()
+        context={
+        "title":"Password Change Form",
+        "form":form
+        }
+
+        return render(request,"accounts/login.html",context)
+    def post(self, request):
+        form = ChangePasswordFOrm(request.POST)
+        context={
+                    "title":"Password Change Form",
+                    "form":form
+                    }
+        
+        if form.is_valid():
+            user = request.user
+            current_password = form.cleaned_data['Current_Password']
+            new_password = form.cleaned_data['New_Password']
+            confirm_password = form.cleaned_data['Comfirm_Password']
+ 
+            if not user.check_password(current_password):
+                messages.error(request, "Incorrect current password. Please try again.")
+                return render(request, "accounts/change_password.html",context)
+
+            if new_password != confirm_password:
+                messages.error(request, "New password and confirm password do not match.")
+                return render(request, "accounts/change_password.html",context)
+
+            if user.username.lower() in new_password.lower():
+                messages.error(request, "New password cannot contain your username.")
+                return render(request, "accounts/change_password.html",context)
+
+            if current_password == new_password:
+                messages.error(request, "New password cannot be the same as the current password.")
+                return render(request, "accounts/change_password.html",context)
+
+            try:
+                password_validation.validate_password(new_password, user=user)
+            except ValidationError as e:
+                for error in e:
+                    messages.error(request, error)
+                context={
+                    "title":"CHange Password",
+                    "form":form
+                    }
+                return render(request, "accounts/change_password.html", context)
+
+            user.password = make_password(new_password)
+            user.save()
+            messages.success(request, "Password successfully changed.")
+            return redirect('index')
+
+        else:
+            context={
+                "title":"CHange Password",
+                "form":form
+                }
+            messages.error(request, "Please fill the form correctly.")
+            return render(request, "accounts/change_password.html",context)
+
 
 class RegisterView(View):
     def get(self,request,registration_for="Guest"):
@@ -17,11 +87,22 @@ class RegisterView(View):
         title="Register Form"
         if form.is_valid():
            user=form.save(commit=False)
+           da=date.today()
+           year_back= da - timedelta(days=18*365)
+           if user.d_o_b >da:
+               messages.error(request,"DOB Cannot be a Future Date")
+               return render(request,'accounts/register.html',{"form":form,"title":title})
+           
+           if user.d_o_b > year_back:
+               messages.error(request,"Minnimum Age should be 18")
+               return render(request,'accounts/register.html',{"form":form,"title":title})
+           
            user.is_staff = True if registration_for=="Hotel" else False 
            user.save()
            username=user.username
            email=user.email
            if user.is_staff==False:
+            messages.success(request,f"Dear Guest : {username} Registraion Successfull")
             send_mail("Welcome to Residency - Registration Successful!"
                         ,f'''Dear {username},
 
@@ -42,9 +123,8 @@ class RegisterView(View):
 
     Warm regards,
     The Residency Team''',"flowstudioworks@gmail.com",[email],True)
-            
-
            else:
+                messages.success(request,f"Dear Hotilier : {username} Registraion Successfull")
                 send_mail(
                 "Welcome to Residency - Start Listing Your Hotel!",
                 f'''Dear {username},
@@ -75,6 +155,7 @@ This is an automated email. Please do not reply directly to this message.
 ''' ,"flowstudioworks@gmail.com",[email],True)
            return redirect("login")
         else:
+            messages.error(request,"fill the forms correctly")
             return render(request,"accounts/register.html",{"form":form,"title":title})
         
 
@@ -96,8 +177,11 @@ class LoginView(View):
                 login(request,user)
                 username=user.username
                 email=user.email
-                # next = request.GET.get('next')
+                messages.success(request,"Login In Successfull")
+                if redirect_field_name:
+                    return redirect(redirect_field_name)
                 if user.is_staff==True:
+
                     send_mail("Login Successful - Welcome Back to Residency",
                               f'''Dear {username},
 
@@ -135,13 +219,15 @@ Warm regards,
 **The Residency Team**  
 ''',"vasisayed09421@gmail.com",{email},True)
                     return redirect('index')
-            return render(request,'accounts/register.html',{"form":form,"title":title})
+            messages.error(request,"Invalid Username Or Password")
+            return render(request,'accounts/login.html',{"form":form,"title":title})
         else:
             messages.success(request,"Successfully Login")
             return render(request,"accounts/login.html",{"form":form,"title":title})
+        
 def logoutview(request):
     logout(request)
-    # messages("Succesfully Logout")
+    messages.success(request,"Succesfully Logout")
     return redirect('index')
 
 class choiceview(View):
@@ -150,26 +236,12 @@ class choiceview(View):
     
     def post(self,request):
         response=request.POST
-        if response.get("choice")=="Hotel":
+        if response.get("choice")=="List Hotel":
             return redirect('register',"Hotel")
-            # form=RegistrationForm()
-            # return render(request,'accounts/register.html',{'form':form})
-        
-        # elif response.get("choice")=="Hotel":
-        #         form=RegistrationForm(request.POST)
-        #         if form.is_valid():
-        #             user=form.save(commit=False)
-        #             user['is_staff']="True"
-        #             user.save()
-        #             redirect('login')
-        #         return render(request,"accounts/register.html",{'form':form})
 
-        elif response.get("choice")=='Guest':
+        elif response.get("choice")=='Book Hotel':
             return redirect('register','Guest')
-            # form=RegistrationForm()
-            # return render(request,'accounts/register.html',{"form":form})
         
-
         else:
             error_message = "Please make a valid selection."
             return render(request, 'accounts/choice.html', {'error': error_message})

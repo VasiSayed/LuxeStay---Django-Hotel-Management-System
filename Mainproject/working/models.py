@@ -56,7 +56,9 @@ class Residency(models.Model):
     class Meta:
         unique_together=("name","area")
     def __str__(self):
-        return f"{self.name} Created By {self.created_by}"
+        return f"{self.name}"
+    
+
 
 
 
@@ -85,11 +87,13 @@ BED_TYPE_CHOICE=[
 class Room_type(models.Model):
     residency=models.ForeignKey(Residency,on_delete=models.CASCADE,null=False,blank=False)
     type_name=models.CharField(max_length=30,choices=TYPE_NAME_CHOICE, default="Queen")
-    bed_type = models.CharField(max_length=20, choices=BED_TYPE_CHOICE, default="Queen")
     class Meta:
-        unique_together=("residency","type_name","bed_type")
+        unique_together=("residency","type_name")
     def __str__(self):
         return f"{self.type_name} In {self.residency.name}"
+    
+    def Namee(self):
+        return f"{self.type_name}"
 
 
 
@@ -98,10 +102,11 @@ class Room_details(models.Model):
     room_type=models.ForeignKey(Room_type,on_delete=models.CASCADE,null=False,blank=False)
     room_no=models.CharField(max_length=10,null=False,blank=False)
     picture=models.ImageField(upload_to="images/residency/roomimages")
-    key_features=models.JSONField(default=dict,null=True,blank=True)
-    AC=models.BooleanField(default=True)
-    avalibilty=models.BooleanField(default=True)
+    key_features=models.CharField(max_length=200)
+    max_guest=models.SmallIntegerField(default=3)
     price_per_night=models.DecimalField(max_digits=10, decimal_places=2,null=False,blank=False)
+    no_new=models.BooleanField(default=False)
+    disable=models.BooleanField(default=False)
     class Meta:
         unique_together=("residency","room_no")
     def __str__(self):

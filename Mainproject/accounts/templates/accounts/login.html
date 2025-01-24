@@ -5,9 +5,9 @@
 {% endblock %}
 
 {% block style %}
-<style>
     .form-container {
-        max-width: 800px;
+        max-width: 100%;
+        width: 50%; /* Set to 50% for larger screens */
         margin: 3rem auto;
         padding: 0 1rem;
     }
@@ -59,6 +59,7 @@
         font-size: 1rem;
         transition: all 0.3s ease;
         background-color: #fff;
+        width: 100%;
     }
 
     .form-control:focus {
@@ -98,7 +99,128 @@
     .submit-btn:active {
         transform: translateY(0);
     }
-</style>
+
+    .forgot-password {
+        color: #007bff; /* Blue color */
+        text-decoration: none;
+        font-size: 1rem;
+        font-weight: 600;
+    }
+
+    .forgot-password:hover {
+        text-decoration: underline;
+        color: #0056b3; /* Darker blue for hover effect */
+    }
+
+    /* Media Query for Responsiveness */
+    @media (max-width: 1200px) {
+        .form-container {
+            width: 45%; /* Adjust width for medium screens */
+        }
+
+        .form-header h2 {
+            font-size: 1.8rem;
+        }
+
+        .submit-btn {
+            padding: 0.8rem 2rem;
+            font-size: 1rem;
+        }
+    }
+
+    @media (max-width: 992px) {
+        .form-container {
+            width: 50%; /* Adjust width for smaller desktop/tablet screens */
+            margin: 2rem auto;
+        }
+
+        .form-header h2 {
+            font-size: 1.6rem;
+        }
+
+        .submit-btn {
+            padding: 0.7rem 1.8rem;
+            font-size: 0.9rem;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .form-container {
+            width: 70%; /* Adjust width for tablet screens */
+            margin: 1.5rem auto;
+        }
+
+        .form-header h2 {
+            font-size: 1.4rem;
+        }
+
+        .submit-btn {
+            padding: 0.7rem 1.5rem;
+            font-size: 0.9rem;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .form-container {
+            width: 85%; /* Adjust width for mobile screens */
+            padding: 0 1rem;
+        }
+
+        .form-header h2 {
+            font-size: 1.2rem;
+        }
+
+        .form-body {
+            padding: 2rem 1rem;
+        }
+
+        .submit-btn {
+            padding: 0.6rem 1.5rem;
+            font-size: 0.8rem;
+        }
+    }
+
+
+    .message {
+        padding: 15px;
+        border-radius: 5px;
+        margin-bottom: 10px;
+        font-size: 16px;
+        width: 100%;
+        max-width: 500px;
+        margin: 10px auto;
+        position: relative;  /* Positioning context for close button */
+    }
+    
+    .message.error {
+        background-color: #e74c3c;  
+        color: white;
+        border-left: 5px solid #c0392b; 
+    }
+    
+    .message.success {
+        background-color: #2ecc71;  
+        color: white;
+        border-left: 5px solid #27ae60;
+    }
+    
+    .close-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-size: 20px;
+        font-weight: bold;
+        color: white;
+        background: none;
+        border: none;
+        cursor: pointer;
+    }
+    
+    .close-btn:hover {
+        color: black;  
+    }
+    
+
 {% endblock %}
 
 {% block content %}
@@ -125,12 +247,34 @@
                         {{ field }}
                     </div>
                 {% endfor %}
+
+                {% if messages %}
+                <div class="messages">
+                    {% for message in messages %}
+                        <div class="message {% if message.tags %}{{ message.tags }}{% endif %}">
+                            <span class="close-btn" onclick="closeMessage(this)">×</span> <!-- Close Button -->
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            
+
                 <div class="text-center mt-4">
-                    <a href="{% url 'password_reset' %}" class="d-block mb-3">Forgot Password?</a>
+                    <a href="{% url 'password_reset' %}" class="forgot-password d-block mb-3">Forgot Password?</a>
                     <button type="submit" class="submit-btn">Login</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
+
+
+<script>
+    function closeMessage(element) {
+        var message = element.parentElement; 
+        message.style.display = "none";  
+    }
+</script>
+
 {% endblock %}

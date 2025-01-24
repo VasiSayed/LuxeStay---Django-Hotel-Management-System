@@ -1,0 +1,225 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Payment Confirmation - Classic Hotel
+{% endblock %}
+
+{% block style %}
+    <style>
+        :root {
+            --dark-bg: #2c3e50;
+            --text-dark: #2c3e50;
+            --error-red: #e74c3c;
+            --success-green: #2ecc71;
+        }
+
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background: #f8f9fa;
+        }
+
+        .main-wrapper {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .payment-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 20px auto;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .payment-header {
+            background: var(--dark-bg);
+            padding: 1.5rem;
+            text-align: center;
+            border-bottom: 3px solid #e74c3c;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .payment-title {
+            color: #fff;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            margin: 0;
+            font-weight: 700;
+        }
+
+        .payment-subtitle {
+            color: #ecf0f1;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            font-family: 'Raleway', sans-serif;
+        }
+
+        .payment-details {
+            padding: 1.5rem;
+            background: linear-gradient(to bottom, #fff, #f8f9fa);
+        }
+
+        .payment-details p {
+            margin: 1rem 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .payment-details p:last-child {
+            border-bottom: none;
+        }
+
+        .payment-details strong {
+            color: var(--text-dark);
+            font-family: 'Raleway', sans-serif;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .payment-details span {
+            color: #2c3e50;
+            font-size: 0.9rem;
+        }
+
+        .payment-button {
+            background: #2c3e50;
+            color: #fff;
+            padding: 0.8rem 1.5rem;
+            font-size: 1rem;
+            border-radius: 30px;
+            border: none;
+            transition: all 0.3s ease;
+            font-family: 'Raleway', sans-serif;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            width: 100%;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+
+        .payment-button:hover {
+            background: #34495e;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(44, 62, 80, 0.2);
+        }
+
+        .secure-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 1rem;
+            color: var(--text-dark);
+            font-size: 0.8rem;
+            padding: 0.5rem;
+            background: #f8f9fa;
+            border-radius: 6px;
+        }
+
+        .secure-badge svg {
+            width: 14px;
+            height: 14px;
+            color: var(--text-dark);
+        }
+
+        .payment-footer {
+            text-align: center;
+            padding: 1rem;
+            color: var(--text-dark);
+            font-size: 0.8rem;
+            background: #f8f9fa;
+            border-top: 1px solid #dee2e6;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        @media (max-width: 768px) {
+            .payment-container {
+                margin: 10px auto;
+            }
+            
+            .payment-details {
+                padding: 1rem;
+            }
+
+            .payment-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="main-wrapper">
+        <div class="payment-container">
+            <div class="payment-header">
+                <h2 class="payment-title">Secure Payment</h2>
+                <p class="payment-subtitle">Complete your reservation with confidence</p>
+            </div>
+
+            <div class="payment-details">
+                <p><strong>Booking Reference:</strong> <span>{{ razorpay_order_id }}</span></p>
+                <p><strong>Check-In Date:</strong> <span>{{checkin}}</span></p>
+                <p><strong>Check-Out Date:</strong> <span>{{checkout}}</span></p>
+                <p><strong>Total Amount:</strong> <span>₹{{ amount }}</span></p>
+                <p><strong>Currency:</strong> <span>{{ currency }}</span></p>
+
+                <form action="" method="post" id="payment-form">
+                    {% csrf_token %}
+                    <button type="button" id="pay-button" class="payment-button">Proceed to Payment</button>
+                </form>
+            </div>
+
+            <div class="secure-badge">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                </svg>
+                Secured by Razorpay
+            </div>
+
+            <div class="payment-footer">
+                Your payment information is encrypted and secure
+            </div>
+        </div>
+    </div>
+
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+document.getElementById('pay-button').onclick = function (e) {
+    var options = {
+        "key": "{{ razorpay_key_id }}", // Razorpay Key ID
+        "amount": "{{ amount_in_paise }}", // Amount in paise
+        "currency": "{{ currency }}", // Currency (e.g., INR)
+        "name": "Classic Hotel",
+        "description": "Reservation #{{ razorpay_order_id }}",
+        "image": "",
+        "order_id": "{{ razorpay_order_id }}", // Razorpay Order ID from backend
+        "prefill": {
+            "name": "{{ user.first_name }} {{ user.last_name }}",
+            "email": "{{ user.email }}",
+            "contact": "{{ user.profile.phone_number }}",
+        },
+        "theme": {
+            "color": "#2c3e50"
+        },
+        "callback_url": "http://127.0.0.1:8000{% url 'payment_callback' razorpay_order_id %}",
+        "redirect": true, // Redirect to the callback URL after payment
+    };
+
+    var rzp = new Razorpay(options);
+    rzp.open();
+    e.preventDefault();
+};
+
+    </script>
+{% endblock %}

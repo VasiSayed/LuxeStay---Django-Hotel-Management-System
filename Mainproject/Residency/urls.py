@@ -24,7 +24,7 @@ from django.conf import settings
 
 
 urlpatterns = [
-    path('admin/', admin.site.urls,name="admin"),
+    path('luxeadmin/', admin.site.urls,name="admin"),
     # path('',views.Guest_view,name='index'),
     path("",views.Base_view.as_view(),name='index'),
     # path("", TemplateView.as_view(template_name='base.html'),name="index"),
@@ -32,6 +32,8 @@ urlpatterns = [
     path('accounts/',include('accounts.urls')),
     path('working/',include('working.urls')),
     path('reservation/',include('reservation.urls')),
+    path('about/',views.about,name="about"),
+    path("payment/",include('payment.urls')),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
