@@ -73,6 +73,7 @@ class Base_view(View):
         checkoutdate = request.POST.get("Check-out-date")
         checkindate = datetime.strptime(checkindate, "%Y-%m-%d").date()
         checkoutdate = datetime.strptime(checkoutdate, "%Y-%m-%d").date()
+
         if checkoutdate <= checkindate:
             state=State.objects.all()
             stat=Residency.objects.values_list('state',flat=True).distinct()
@@ -91,6 +92,27 @@ class Base_view(View):
         }
             messages.error(request,"Invalid Check_Out-Date cannot be same or before The Check-In_date")
             return render(request,'base.html',context)
+        
+        if (checkoutdate-checkindate).days >10:
+            state=State.objects.all()
+            stat=Residency.objects.values_list('state',flat=True).distinct()
+            room_t=Room_details.objects.values_list('room_type__type_name',flat=True).distinct()
+            today=date.today()
+            formatted_date = today.strftime("%Y-%m-%d")
+            max_date= today+timedelta(days=60)
+            max_date= max_date.strftime("%Y-%m-%d")
+            
+            context={
+            'state':state,
+            'stat':stat,
+            'room_t':room_t,
+            "default_date":formatted_date,
+            "max_date":max_date,
+        }
+            messages.error(request,"Cannot Book ROom for mOre than !2 days")
+            return render(request,'base.html',context)
+
+
         rooms = Room_details.objects.filter(residency__state=state, room_type__type_name=room_type)
         
         booked_room_ids = []
