@@ -129,11 +129,11 @@ class RegisterView(View):
                 "Welcome to Residency - Start Listing Your Hotel!",
                 f'''Dear {username},
 
-            Thank you for joining **Residency** as a host! We’re thrilled to have you onboard and can't wait to help you connect with travelers from around the globe.
+            Thank you for joining Residency LuxeStay as a host! We’re thrilled to have you onboard and can't wait to help you connect with travelers from around the globe.
 
 ### What's Next?
-2. **Showcase Your Rooms**: Provide detailed information about the rooms you offer, including pricing, amenities, and photos, to attract more guests.
-3. **Go Live**: Once your property is approved, it will be visible to thousands of travelers searching for the perfect stay.
+2. Showcase Your Rooms: Provide detailed information about the rooms you offer, including pricing, amenities, and photos, to attract more guests.
+3. Go Live: Once your property is approved, it will be visible to thousands of travelers searching for the perfect stay.
 
 ### Why List on Residency?
 - Reach a global audience of travelers.
@@ -187,36 +187,36 @@ class LoginView(View):
 
 Your login to **Residency** was successful! We're happy to have you back managing your listings and connecting with travelers.
 
-### Next Steps:
-- **Manage Your Hotel**: Update your hotel details, availability, and pricing.
-- **View Bookings**: Check and respond to guest bookings in your dashboard.
-- **Enhance Your Listing**: Make your property stand out with great photos and competitive rates.
+Next Steps:
+- Manage Your Hotel: Update your hotel details, availability, and pricing.
+- View Bookings: Check and respond to guest bookings in your dashboard.
+- Enhance Your Listing: Make your property stand out with great photos and competitive rates.
 
 
-If this login wasn’t made by you, please reset your password immediately or contact our support team at **support@residency.com**.
+If this login wasn’t made by you, please reset your password immediately or contact our support team at support@residency.com.
 
 Warm regards,  
-**The Residency Team**  
+The Residency Team
 ''',"vasisayed09421@gmail.com",{email},True)
                     return redirect('hoteler')
                 else:
                     send_mail("Login Successful - Welcome Back to Residency",
                                f'''Dear {username},
 
-Your login to **Residency** was successful! We're excited to help you find your next perfect stay.
+Your login to LuxeStay was successful! We're excited to help you find your next perfect stay.
 
 ### What You Can Do Now:
-- **Explore Hotels**: Browse top-rated properties tailored to your preferences.
-- **Manage Bookings**: View, update, or cancel your upcoming reservations.
-- **Exclusive Offers**: Check out the latest deals and discounts.
+- Explore Hotels: Browse top-rated properties tailored to your preferences.
+- Manage Bookings: View, update, or cancel your upcoming reservations.
+- Exclusive Offers: Check out the latest deals and discounts.
 
 Start exploring here:  
-**[Login to Your Account](guest-dashboard-url.com)**
+[{username}](guest-dashboard-url.com)**
 
-If this login wasn’t made by you, please reset your password immediately or contact our support team at **support@residency.com**.
+If this login wasn’t made by you, please reset your password immediately or contact our support team at support@residency.com.
 
 Warm regards,  
-**The Residency Team**  
+The LuxeStay Team 
 ''',"vasisayed09421@gmail.com",{email},True)
                     return redirect('index')
             messages.error(request,"Invalid Username Or Password")
